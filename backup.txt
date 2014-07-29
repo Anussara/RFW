@@ -1,0 +1,57 @@
+*** Settings ***
+Library    Selenium2Library
+Test Teardown    Close Browser
+
+*** Variables ***
+
+
+*** Testcases ***
+Log in Success
+	ไปที่หน้า login เข้าระบบตัวอย่าง
+	กรอกข้อมูลของผู้ใช้งาน
+	ตรวจสอบผู้ใช้งาน login สำเร็จนะ
+
+User failure
+	ไปที่หน้า login เข้าระบบตัวอย่าง
+	Input Text    username_field    invalid
+	Input Text    password_field    demo
+	Click Button   LOGIN
+	Title Should Be    Error Page
+	Wait Until Page Contains    Login failed
+
+Password failure
+	ไปที่หน้า login เข้าระบบตัวอย่าง
+	Input Text    username_field    demo
+	Input Text    password_field    invalid
+	Click Button   LOGIN
+	Title Should Be    Error Page
+	Wait Until Page Contains    Login failed
+
+Null
+	ไปที่หน้า login เข้าระบบตัวอย่าง
+	Input Text    username_field    ${EMPTY}
+	Input Text    password_field    ${EMPTY}
+	Click Button   LOGIN
+	Title Should Be    Error Page
+	Wait Until Page Contains    Login failed
+
+Invalid
+	ไปที่หน้า login เข้าระบบตัวอย่าง
+	Input Text    username_field    invalid
+	Input Text    password_field    invalid
+	Click Button   LOGIN
+	Title Should Be    Error Page
+	Wait Until Page Contains    Login failed
+
+*** Keywords ***
+ไปที่หน้า login เข้าระบบตัวอย่าง
+	Open Browser    http://localhost:7272/html/
+
+กรอกข้อมูลของผู้ใช้งาน
+	Input Text    username_field    demo
+	Input Text    password_field    mode
+	Click Button    LOGIN
+
+ตรวจสอบผู้ใช้งาน login สำเร็จนะ
+	Title Should Be    Welcome Page
+	Wait Until Page Contains    Login succeeded
